@@ -7,12 +7,20 @@ const bodyParser = require('body-parser');
 const sassMiddleware = require('node-sass-middleware');
 const index = require('./routes/index');
 const users = require('./routes/users');
+const cars = require('./routes/cars');
+const helmet = require('helmet');
 
-
-// mongoose.promise = global.promise;
 const mongoose = require('mongoose');
-mongoose.createConnection('localhost','mydb');
-// mongoose.connect("mongodb://localhost/local");
+mongoose.Promise = global.Promise;
+// mongoose.createConnection('localhost','mydb');
+
+// 这里4.4的版本提示错误
+mongoose.connect("mongodb://localhost/mydb");
+
+// mongoose.connect('mongodb://localhost/mydb', { useMongoClient: true });
+    // .then(() => require('./db-init')(server))
+    // .catch(err => console.error(err));
+
 
 const app = express();
 
@@ -23,6 +31,8 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
+// 跨站脚本攻击
+app.use(helmet());
 
 // 日志输出 dev 
 app.use(logger('dev'));
@@ -43,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/cars', cars);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

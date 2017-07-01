@@ -9,7 +9,7 @@ const userSchema = new Schema({
     gender: Number,
     email: String,
     is_del:Boolean,
-    cat:[{
+    cars:[{
     	type: Schema.Types.ObjectId,
     	ref: 'car'
     }]
